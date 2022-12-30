@@ -23,12 +23,6 @@ namespace Shake
         }
     }
 
-    public interface IRule
-    {
-        bool IsFor(string file);
-        Task Build(IBuildSystem.IBuilder builder);
-    }
-
     public class RuleNotFoundException : Exception
     {
         public RuleNotFoundException(string file) : base($"No rule was found for: {file}")
