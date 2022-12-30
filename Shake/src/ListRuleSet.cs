@@ -12,17 +12,17 @@ namespace Shake
             _rules = rules;
         }
         
-        public Task<IRule?> FindFor(string file)
+        public Task<IRule> FindFor(string file)
         {
             foreach (var rule in _rules)
             {
                 if (rule.IsFor(file))
                 {
-                    return Task.FromResult<IRule?>(rule);
+                    return Task.FromResult(rule);
                 }
             }
             
-            return Task.FromResult<IRule?>(null);
+            throw new RuleNotFoundException(file);
         }
     }
 }

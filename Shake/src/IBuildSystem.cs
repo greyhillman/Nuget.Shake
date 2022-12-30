@@ -20,10 +20,4 @@ namespace Shake
             FileStream WriteChanged(string filepath);
         }
     }
-
-    public class RuleNotFoundException : Exception
-    {
-        public RuleNotFoundException(string file) : base($"No rule was found for: {file}")
-        { }
-    }
 }

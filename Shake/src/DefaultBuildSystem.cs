@@ -25,22 +25,25 @@ namespace Shake
                     continue;
                 }
 
-                var matchingRule = await _rules.FindFor(file);
-                if (matchingRule != null)
+                IRule matchingRule;
+                try
                 {
-                    await matchingRule.Build(new Builder(this, file));
-                    
-                    _builtFiles.Add(file);
-                    continue;
+                    matchingRule = await _rules.FindFor(file);
+                }
+                catch (RuleNotFoundException)
+                {
+                    if (File.Exists(file))
+                    {
+                        _builtFiles.Add(file);
+                        continue;
+                    }
+
+                    throw new InvalidOperationException($"Could not find rule or file for {file}");
                 }
 
-                if (File.Exists(file))
-                {
-                    _builtFiles.Add(file);
-                    continue;
-                }
+                await matchingRule.Build(new Builder(this, file));
 
-                throw new InvalidOperationException($"Could not find rule or file for {file}");
+                _builtFiles.Add(file);
             }
         }
 
