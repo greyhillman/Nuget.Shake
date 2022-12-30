@@ -11,8 +11,6 @@ namespace Shake
         /// </summary>
         Task Want(params string[] files);
 
-        void AddRule(IRule rule);
-
         interface IBuilder
         {
             string OutputFile { get; }

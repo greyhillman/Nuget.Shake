@@ -8,17 +8,12 @@ namespace Shake
     public class DefaultBuildSystem : IBuildSystem
     {
         private readonly HashSet<string> _builtFiles;
-        private readonly List<IRule> _rules;
+        private readonly IRuleSet _rules;
 
-        public DefaultBuildSystem()
+        public DefaultBuildSystem(IRuleSet rules)
         {
             _builtFiles = new();
-            _rules = new();
-        }
-
-        public void AddRule(IRule rule)
-        {
-            _rules.Add(rule);
+            _rules = rules;
         }
 
         public async Task Want(string[] files)
@@ -30,16 +25,7 @@ namespace Shake
                     continue;
                 }
 
-                IRule? matchingRule = null;
-                foreach (var rule in _rules)
-                {
-                    if (rule.IsFor(file))
-                    {
-                        matchingRule = rule;
-                        break;
-                    }
-                }
-
+                var matchingRule = await _rules.FindFor(file);
                 if (matchingRule != null)
                 {
                     await matchingRule.Build(new Builder(this, file));
