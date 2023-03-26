@@ -1,23 +1,23 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Shake
 {
-    public interface IBuildSystem
+    public interface IBuildSystem<T>
     {
         /// <summary>
         /// Build the independent files asynchronously.
         /// </summary>
-        Task Want(params string[] files);
+        Task Want(params T[] resources);
 
         interface IBuilder
         {
-            string OutputFile { get; }
-            Task Need(params string[] files);
+            T Resource { get; }
+            Task Need(params T[] resources);
 
-            // Like set the content of filepath to `content`
-            FileStream WriteChanged(string filepath);
+            /// <summary>
+            /// Mark resource as built.
+            /// </summary>
+            Task Built(T resource);
         }
     }
 }

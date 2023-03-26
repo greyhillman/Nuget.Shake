@@ -5,80 +5,65 @@ using System.Threading.Tasks;
 
 namespace Shake
 {
-    public class DefaultBuildSystem : IBuildSystem
+    public class DefaultBuildSystem<T> : IBuildSystem<T>
     {
-        private readonly HashSet<string> _builtFiles;
-        private readonly IRuleSet _rules;
+        private readonly HashSet<T> _builtResources;
+        private readonly IRuleSet<T> _rules;
 
-        public DefaultBuildSystem(IRuleSet rules)
+        public DefaultBuildSystem(IRuleSet<T> rules)
         {
-            _builtFiles = new();
+            _builtResources = new();
             _rules = rules;
         }
 
-        public async Task Want(string[] files)
+        public async Task Want(params T[] resources)
         {
-            foreach (var file in files)
+            foreach (var resource in resources)
             {
-                if (_builtFiles.Contains(file))
+                if (_builtResources.Contains(resource))
                 {
                     continue;
                 }
 
-                IRule matchingRule;
+                IRule<T> matchingRule;
                 try
                 {
-                    matchingRule = await _rules.FindFor(file);
+                    matchingRule = await _rules.FindFor(resource);
                 }
-                catch (RuleNotFoundException)
+                catch (RuleNotFoundException<T>)
                 {
-                    if (File.Exists(file))
-                    {
-                        _builtFiles.Add(file);
-                        continue;
-                    }
-
-                    throw new InvalidOperationException($"Could not find rule or file for {file}");
+                    throw new InvalidOperationException($"Could not find rule or file for {resource}");
                 }
 
-                await matchingRule.Build(new Builder(this, file));
+                await matchingRule.Build(new Builder(this, resource));
 
-                _builtFiles.Add(file);
+                _builtResources.Add(resource);
             }
         }
 
-        internal class Builder : IBuildSystem.IBuilder
+        internal class Builder : IBuildSystem<T>.IBuilder
         {
-            public string OutputFile { get; private set; }
+            public T Resource { get; private set; }
 
-            private readonly DefaultBuildSystem _buildSystem;
+            private readonly DefaultBuildSystem<T> _buildSystem;
 
-            public Builder(DefaultBuildSystem buildSystem, string file)
+            public Builder(DefaultBuildSystem<T> buildSystem, T resource)
             {
-                OutputFile = file;
+                Resource = resource;
                 _buildSystem = buildSystem;
             }
 
-            public async Task Need(string[] files)
+            public async Task Need(params T[] resources)
             {
-                await _buildSystem.Want(files);
+                await _buildSystem.Want(resources);
             }
 
-            public FileStream WriteChanged(string filepath)
+            public async Task Built(T resource)
             {
-                _buildSystem._builtFiles.Add(filepath);
-
-                var directory = Path.GetDirectoryName(filepath);
-
-                Directory.CreateDirectory(directory);
-
-                var filestream = File.OpenWrite(filepath);
-
-                // Clear the file contents
-                filestream.SetLength(0);
-                filestream.Flush();
-
-                return filestream;
+                await Task.Run(() =>
+                {
+                    _buildSystem._builtResources.Add(resource);
+                });
             }
         }
     }

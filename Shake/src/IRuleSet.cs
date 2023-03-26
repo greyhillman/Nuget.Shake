@@ -3,14 +3,14 @@ using System.Threading.Tasks;
 
 namespace Shake
 {
-    public interface IRuleSet
+    public interface IRuleSet<T>
     {
-        Task<IRule> FindFor(string file);
+        Task<IRule<T>> FindFor(T resource);
     }
 
-    public class RuleNotFoundException : Exception
+    public class RuleNotFoundException<T> : Exception
     {
-        public RuleNotFoundException(string file) : base($"No rule was found for: {file}")
+        public RuleNotFoundException(T resource) : base($"No rule was found for: {resource}")
         { }
     }
 }

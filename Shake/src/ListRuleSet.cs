@@ -3,26 +3,26 @@ using System.Threading.Tasks;
 
 namespace Shake
 {
-    public class ListRuleSet : IRuleSet
+    public class ListRuleSet<T> : IRuleSet<T>
     {
-        private readonly List<IRule> _rules;
+        private readonly List<IRule<T>> _rules;
 
-        public ListRuleSet(List<IRule> rules)
+        public ListRuleSet(List<IRule<T>> rules)
         {
             _rules = rules;
         }
-        
-        public Task<IRule> FindFor(string file)
+
+        public Task<IRule<T>> FindFor(T resource)
         {
             foreach (var rule in _rules)
             {
-                if (rule.IsFor(file))
+                if (rule.IsFor(resource))
                 {
                     return Task.FromResult(rule);
                 }
             }
-            
-            throw new RuleNotFoundException(file);
+
+            throw new RuleNotFoundException<T>(resource);
         }
     }
 }

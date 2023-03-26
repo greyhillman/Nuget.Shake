@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 
 namespace Shake
 {
-    public interface IRule
+    public interface IRule<T>
     {
-        bool IsFor(string file);
-        Task Build(IBuildSystem.IBuilder builder);
+        bool IsFor(T resource);
+        Task Build(IBuildSystem<T>.IBuilder builder);
     }
 }
