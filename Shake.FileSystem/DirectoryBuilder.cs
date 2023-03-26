@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 
 namespace Shake.FileSystem;
 
@@ -7,10 +6,14 @@ public class DirectoryBuilder
 {
     private readonly List<string> _levels;
 
-    public DirectoryBuilder(DirectoryPath directory)
+    public DirectoryBuilder()
     {
         _levels = new();
+    }
 
+    public DirectoryBuilder(DirectoryPath directory)
+        : this()
+    {
         for (var level = 0; level < directory.Depth; level++)
         {
             _levels.Add(directory[level]);
