@@ -48,6 +48,8 @@ public class DefaultFileSystem : IFileSystem
         {
             var absolutePath = _workingDirectory + file;
 
+            Directory.CreateDirectory(absolutePath.Directory.ToString());
+
             return File.OpenWrite(absolutePath.ToString());
         });
     }
@@ -57,6 +59,8 @@ public class DefaultFileSystem : IFileSystem
         return await Task.Run(() =>
         {
             var absolutePath = _workingDirectory + file;
+
+            Directory.CreateDirectory(absolutePath.Directory.ToString());
 
             var stream = File.OpenWrite(absolutePath.ToString());
 
@@ -93,7 +97,9 @@ public class DefaultFileSystem : IFileSystem
             var absoluteSource = _workingDirectory + source;
             var absoluteDestination = _workingDirectory + destination;
 
-            File.Copy(absoluteSource.ToString(), absoluteDestination.ToString());
+            Directory.CreateDirectory(absoluteDestination.Directory.ToString());
+
+            File.Copy(absoluteSource.ToString(), absoluteDestination.ToString(), overwrite: true);
         });
     }
 }
