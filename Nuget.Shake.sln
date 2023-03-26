@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shake", "Shake\Shake.csproj", "{5F9EC40D-008A-4F9F-B3ED-7D0FC4A4BA26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shake.FileSystem", "Shake.FileSystem\Shake.FileSystem.csproj", "{E197C6C2-C5A4-4EF6-BCB0-724DDC055C27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5F9EC40D-008A-4F9F-B3ED-7D0FC4A4BA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F9EC40D-008A-4F9F-B3ED-7D0FC4A4BA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F9EC40D-008A-4F9F-B3ED-7D0FC4A4BA26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E197C6C2-C5A4-4EF6-BCB0-724DDC055C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E197C6C2-C5A4-4EF6-BCB0-724DDC055C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E197C6C2-C5A4-4EF6-BCB0-724DDC055C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E197C6C2-C5A4-4EF6-BCB0-724DDC055C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
