@@ -50,22 +50,15 @@ public class DefaultFileSystem : IFileSystem
 
             Directory.CreateDirectory(absolutePath.Directory.ToString());
 
-            return File.OpenWrite(absolutePath.ToString());
+            return File.Open(absolutePath.ToString(), FileMode.Create, FileAccess.Write);
         });
     }
 
     public async Task<StreamWriter> SetText(FilePath file)
     {
-        return await Task.Run(() =>
-        {
-            var absolutePath = _workingDirectory + file;
+        var stream = await Set(file);
 
-            Directory.CreateDirectory(absolutePath.Directory.ToString());
-
-            var stream = File.OpenWrite(absolutePath.ToString());
-
-            return new StreamWriter(stream);
-        });
+        return new StreamWriter(stream);
     }
 
     public async Task<Stream> Read(FilePath file)
